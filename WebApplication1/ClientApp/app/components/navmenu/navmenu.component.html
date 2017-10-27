@@ -1,0 +1,52 @@
+<div class='main-nav'>
+
+    <nav class="navbar navbar-inverse bg-primary">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Project name</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+
+                    <li [routerLinkActive]="['link-active']">
+                        <a [routerLink]="['/home']">
+                            Home
+                        </a>
+                    </li>
+                    <li [routerLinkActive]="['link-active']">
+                        <a [routerLink]="['/counter']">
+                            Counter
+                        </a>
+                    </li>
+                    <li [routerLinkActive]="['link-active']">
+                        <a [routerLink]="['/fetch-data']">
+                           Fetch data
+                        </a>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><span *ngIf="isSignedIn()" style="padding:15px 10px;display:block;">Welcome {{userName()}}</span></li>
+
+                    <li [routerLinkActive]="['link-active']" *ngIf="!isSignedIn()">
+                        <a [routerLink]="['/signin']">
+                            Sign In
+                        </a>
+                    </li>
+
+                    <li [routerLinkActive]="['link-active']" *ngIf="isSignedIn()">
+                        <a [routerLink]="['/signout']">
+                            Sign Out
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+</div>
