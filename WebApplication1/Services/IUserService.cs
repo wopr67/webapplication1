@@ -14,11 +14,21 @@ namespace WebApplication1.Services
 
     public class User
     {
-        public User(string username)
+        public User(string username, string password, int id)
         {
-            Username = username;
+            this.Username = username.ToLower();
+            this.Password = password;
+            this.ID = id;
+        }
+
+        public User(string username, string password)
+        {
+            this.Username = username.ToLower();
+            this.Password = password;
         }
 
         public string Username { get; private set; }
+        public string Password { get; set; }
+        public int ID { get; private set; }
     }
 }

@@ -1,29 +1,26 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
-using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using WebApplication1.Classes;
 
 namespace WebApplication1.Services
 {
     public class UserService : IUserService
     {
-        private IDictionary<string, Tuple<string, User>> _users =
-             new Dictionary<string, Tuple<string, User>>();
+        private static int _nextUserId = 100;
+        private List<User> _users = new List<User>();
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="users"></param>
-        public UserService(IDictionary<string, string> users)
+        public UserService(List<User> seedusers)
         {
-            foreach (var user in users)
+            _users = new List<User>();
+
+            foreach (User u in seedusers)
             {
-                _users.Add(user.Key.ToLower(),
-                    //Tuple.Create(BCrypt.Net.BCrypt.HashPassword(user.Value, 10), new User(user.Key)));
-                    Tuple.Create(user.Value, new User(user.Key)));
+                _users.Add(new User(u.Username.ToLower(), Crypto.HashPassword(u.Password), _nextUserId++));
             }
         }
 
@@ -37,21 +34,17 @@ namespace WebApplication1.Services
         /// <returns></returns>
         public async Task<bool> AddUserAsync(HttpContext http, string username, string password, string password2)
         {
-            if (_users.ContainsKey(username.ToLower()))
+            if (_users.Where (x=>x.Username == username).Any())//.ContainsKey(username.ToLower()))
             {
                 return false;
-                //return Task.FromResult(false);
             }
 
             if (password != password2)
             {
                 return false;
-                //return Task.FromResult(false);
             }
 
-            _users.Add(username.ToLower(),
-                //Tuple.Create(BCrypt.Net.BCrypt.HashPassword(password, 10), new User(username)));
-                Tuple.Create(password, new User(username)));
+            _users.Add(new User(username.ToLower(), Crypto.HashPassword(password), _nextUserId++));
 
             await SignInUserAsync(http, username);
 
@@ -67,14 +60,13 @@ namespace WebApplication1.Services
         /// <returns></returns>
         public Task<bool> VerifyCredentials(string username, string password, out User user)
         {
-            var key = username.ToLower();
-            if (_users.ContainsKey(key))
+            User u = _users.Where(x => x.Username == username.ToLower()).FirstOrDefault();
+            if (u != null)
             {
-                var hash = _users[key].Item1;
-                //if (BCrypt.Net.BCrypt.Verify(password, hash))
-                if (password == hash)
+                var hash = u.Password;
+                if (Crypto.HashPassword(password) == hash)
                 {
-                    user = _users[key].Item2;
+                    user = u;
                     return Task.FromResult(true);
                 }
             }
@@ -90,14 +82,19 @@ namespace WebApplication1.Services
         /// <returns></returns>
         public async Task SignInUserAsync(HttpContext http, string username)
         {
-            var claims = new List<Claim>
+            User u = _users.Where(x => x.Username == username.ToLower()).FirstOrDefault();
+            if (u!=null)
             {
-                new Claim(ClaimTypes.NameIdentifier, username),
-                new Claim(ClaimTypes.Name, username)
-            };
-            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-            var principal = new ClaimsPrincipal(identity);
-            await http.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.NameIdentifier, username),
+                    new Claim(ClaimTypes.Name, username),
+                    new Claim(ClaimTypes.NameIdentifier, u.ID.ToString())
+                };
+                var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                var principal = new ClaimsPrincipal(identity);
+                await http.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+            }
         }
 
         /// <summary>

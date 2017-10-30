@@ -24,10 +24,8 @@ namespace WebApplication1
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var users = new Dictionary<string, string>
-            {
-                { "c", "c" }
-            };
+            List<User> users = new List<User>();
+            users.Add(new User("c", "c"));
 
             var svc = new UserService(users);
             services.AddSingleton<IUserService>(svc);
