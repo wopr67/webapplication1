@@ -19,11 +19,19 @@
                             Home
                         </a>
                     </li>
+
+                    <li [routerLinkActive]="['link-active']" *ngIf="isSignedIn()">
+                        <a [routerLink]="['/items']">
+                            Items
+                        </a>
+                    </li>
+
                     <li [routerLinkActive]="['link-active']">
                         <a [routerLink]="['/counter']">
                             Counter
                         </a>
                     </li>
+                    
                     <li [routerLinkActive]="['link-active']">
                         <a [routerLink]="['/fetch-data']">
                            Fetch data

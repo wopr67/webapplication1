@@ -12,6 +12,7 @@ import { CounterComponent } from './components/counter/counter.component';
 import { SigninComponent } from './components/signin/signin.component';
 import { SignoutComponent } from './components/signout/signout.component';
 import { SignupComponent } from './components/signup/signup.component';
+import { ItemsComponent } from './components/items/items.component';
 
 import { AuthService } from './auth.service';
 
@@ -24,7 +25,8 @@ import { AuthService } from './auth.service';
 		HomeComponent,
 		SigninComponent,
         SignoutComponent,
-        SignupComponent
+        SignupComponent,
+        ItemsComponent
     ],
     imports: [
         CommonModule,
@@ -38,6 +40,7 @@ import { AuthService } from './auth.service';
 			{ path: 'signin', component: SigninComponent },
             { path: 'signout', component: SignoutComponent },
             { path: 'signup', component: SignupComponent },
+            { path: 'items', component: ItemsComponent },
 			{ path: '**', redirectTo: 'home' }
         ])
     ]

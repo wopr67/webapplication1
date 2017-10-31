@@ -24,8 +24,10 @@ namespace WebApplication1
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            List<User> users = new List<User>();
-            users.Add(new User("c", "c"));
+            List<User> users = new List<User>()
+            {
+                new User("c", "c")
+            };
 
             var svc = new UserService(users);
             services.AddSingleton<IUserService>(svc);
@@ -33,7 +35,7 @@ namespace WebApplication1
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                     .AddCookie(options => {
                         options.LoginPath = "/Account/SignIn";
-                        options.LogoutPath = "/Account/LogOff";
+                        options.LogoutPath = "/Account/SignOut";
                     });
 
             services.AddMvc();

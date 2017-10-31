@@ -32,13 +32,14 @@ export class AuthService{
         }, error => console.error(error));
     }
 
-    public authenticate() {
+    public authenticate(callback?: () => any) {
         this.http.get(this.baseUrl + 'api/Account/Authenticate')
             .map(res => res.json())
             .subscribe(result => {
                 this.isSignedIn = result.isAuthenticated;
                 this.userName = result.username;
+                if (callback)
+                    callback();
             }, error => console.error(error));
     }
-
 }
