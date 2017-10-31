@@ -14,6 +14,9 @@ import { SignoutComponent } from './components/signout/signout.component';
 import { SignupComponent } from './components/signup/signup.component';
 import { ItemsComponent } from './components/items/items.component';
 
+import { UnitsComponent } from './components/units/units.component';
+import { CategoriesComponent } from './components/categories/categories.component';
+
 import { AuthService } from './auth.service';
 
 @NgModule({
@@ -26,7 +29,9 @@ import { AuthService } from './auth.service';
 		SigninComponent,
         SignoutComponent,
         SignupComponent,
-        ItemsComponent
+        ItemsComponent,
+        UnitsComponent,
+        CategoriesComponent,
     ],
     imports: [
         CommonModule,
@@ -41,6 +46,8 @@ import { AuthService } from './auth.service';
             { path: 'signout', component: SignoutComponent },
             { path: 'signup', component: SignupComponent },
             { path: 'items', component: ItemsComponent },
+            { path: 'units', component: UnitsComponent },
+            { path: 'categories', component: CategoriesComponent },
 			{ path: '**', redirectTo: 'home' }
         ])
     ]

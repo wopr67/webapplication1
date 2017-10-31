@@ -26,6 +26,20 @@
                         </a>
                     </li>
 
+                    <li [routerLinkActive]="['link-active']" *ngIf="isSignedIn()">
+                        <a [routerLink]="['/categories']">
+                            Catagories
+                        </a>
+                    </li>
+
+                    <li [routerLinkActive]="['link-active']" *ngIf="isSignedIn()">
+                        <a [routerLink]="['/units']">
+                            Units
+                        </a>
+                    </li>
+
+
+
                     <li [routerLinkActive]="['link-active']">
                         <a [routerLink]="['/counter']">
                             Counter
